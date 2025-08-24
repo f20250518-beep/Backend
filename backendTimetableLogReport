@@ -89,7 +89,7 @@ while index < len(statusCode):
     index += 1
 print("\n-------------------------------------------")
 print("Number Of Timetables Generated: ", backtracking + iterative)
-print("Timetables Generated On average: ", (backtracking + iterative)/len(users))
+print("Timetables Generated On Average: ", (backtracking + iterative)/len(users))
 print("Number Of Timetables Generated Using Backtracking: ", backtracking)
 print("Number Of Timetables Generated Using Iterative: ", iterative)
                                                                                                                        #-----
