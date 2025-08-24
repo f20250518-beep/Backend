@@ -69,7 +69,7 @@ for line in file:
 print("Number Of API Requests: ", apiCount, "\n\n------------------------------------------- \nEndpoint Popularity \n")
 index = 0
 while index < len(endpoint):
-    print (endpoint[index], ": ", endpointCount[index],)
+    print (endpoint[index], ": ", endpointCount[index], "requests")
     index += 1
 print("\nEndpoint Time Related Data \n")
 index = 0
