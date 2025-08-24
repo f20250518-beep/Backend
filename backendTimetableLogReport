@@ -1,60 +1,56 @@
-y = 0
-x = 1
-i = 0
-j = 0
-timeMax = 0
-timeTotal = 0
-lines = 0
-exists = 0
+apiCount = 0
+endpoint = []; endpointCount = []
+endpointTime = []; endpointTimeCount = []; endpointTimeMax = []
+year = [0, 0, 0, 0, 0]
 users = []
-userYear = [0, 0, 0, 0, 0]
-courseCount = 0
-sectionCount = 0
-endpoints = []
-endpointsCount = []
+userYear = [0 ,0 ,0 ,0, 0]
+statusCode = []
+statusCodeCount = []
+backtracking = 0; iterative = 0
 
-file = open(r"D:\timetable.log")
+file = open(r"D:/timetable.log")
 for line in file:
-    entry = file.readline()
-    entryArray = entry.split()
-    
-    if entryArray[3] == "GET" or entryArray[3] == "POST":
+    entryArray = line.split()
 
-        time = float(entryArray[6][0:-3])
-        if time > timeMax:
-            timeMax = time                                                  #part 3
-        timeTotal = time + timeTotal
-        lines = lines + 1
+    if entryArray[3] in ("GET", "POST") and len(entryArray) > 6 and entryArray[5] in ("200", "400"):
+        apiCount += 1
 
-        if entryArray[5] == "200" or entryArray[5] == "400":
-            if entryArray[4] == "/courses":
-                courseCount = courseCount + 1                              #part 1
-                y = y + 1
-            elif entryArray[4] == "/sections":
-                sectionCount = sectionCount + 1
-                y = y + 1
-
-    if len(entryArray)<=4:
-        continue
-    else:
-        ifEndpoint = list(entryArray[4])
-        if ifEndpoint[0] == '/':
-            j = len(endpoints)
-            i = 0
-            while i <= j-1:
-                if str(endpoints[i]) == str(entryArray[4]):
-                    endpointsCount[i] = endpointsCount[i] + 1              #part 2
-                    exists = 1
-                i = i + 1
-            if exists == 0:
-                endpoints.append(entryArray[4])
-                endpointsCount.append(0)               
-            exists = 0
+    if len(entryArray) > 5 and list(entryArray[4])[0] == "/" and entryArray[3] in ('GET', "POST"):
+        time = float(entryArray[-1][0:-3])
+        if (list(entryArray[-1]))[-2] == "m":
+            time = time*1000
+        elif (list(entryArray[-1]))[-2] == "n":
+            time = time/1000
+        j = len(endpoint); i = 0; exists = 0
+        while i < j:
+            if entryArray[4] == endpoint[i]:
+                endpointCount[i] += 1
+                endpointTime[i] += time
+                endpointTimeCount[i] += 1
+                if time > endpointTimeMax[i]:
+                    endpointTimeMax[i] = time
+                exists = 1
+            i += 1
+        if exists == 0:
+                endpoint.append(entryArray[4])
+                endpointCount.append(1)
+                endpointTime.append(time)
+                endpointTimeCount.append(1)
+                endpointTimeMax.append(time)
+        
+        j = len(statusCode); i = 0; exists = 0
+        while i < j:
+            if entryArray[5] == statusCode[i]:
+                statusCodeCount[i] += 1
+                exists = 1
+            i += 1
+        if exists == 0:
+                statusCode.append(entryArray[5])
+                statusCodeCount.append(1)
 
     if entryArray[3] == "router:":
         if len(entryArray) >= 6:
-            j = len(users)
-            i = 0
+            j = len(users); i = 0; exists = 0
             while i <= j-1:
                 if str(users[i]) == str(entryArray[5]):               #part 4     
                     exists = 1
@@ -64,31 +60,39 @@ for line in file:
                 userId = list(entryArray[5])
                 userYear[int(userId[4])-1] = userYear[int(userId[4])-1] + 1
 
-            exists = 0
+    if "Backtracking" in line:
+        backtracking += 1
+    elif "Iterative" in line:
+        iterative += 1
+    
+print("Number Of API Requests: ", apiCount, "\n ------------------------------------------- \n Endpoint Popularity \n")
+index = 0
+while index < len(endpoint):
+    print (endpoint[index], ": ", endpointCount[index],)
+    index += 1
+print("\n Endpoint Time Related Data \n")
+index = 0
+while index < len(endpointTime):
+    print (endpoint[index], ": Avg: ", (endpointTime[index]/endpointTimeCount[index]), "µs  | Max: ",endpointTimeMax[index], "µs")
+    index += 1
+print("\n -------------------------------------------")
+print("Total Number Of Unique IDs: ", len(users), "\n")
+index = 4; year = 1
+while year <= len(userYear):
+    print ("Number Of Year", year , "Students: ", userYear[index])
+    index -= 1; year += 1 
+print("\n ------------------------------------------- \n Status Code \n")
+index = 0
+while index < len(statusCode):
+    print (statusCode[index], ": ", statusCodeCount[index])
+    index += 1
+print("\n")
+print("Number Of Timetables Generated: ", backtracking + iterative)
+print("Timetables Generated On average: ", (backtracking + iterative)/len(users))
+print("Number Of Timetables Generated Using Backtracking: ", backtracking)
+print("Number Of Timetables Generated Using Iterative: ", iterative)
+
+file.close()
+
 
     
-timeAverage = timeTotal/lines
-noOfUsers = len(users) 
-
-print ("APIs Requested: ", y )
-print ("")
-print ("Endpoints In GET/POST")
-print ("/courses: ", courseCount)
-print ("/sections: ", sectionCount )
-print ("")
-print ("Endpoint Popularity ")
-index = 0
-while index < len(endpoints):
-    print (endpoints[index], ": ", endpointsCount[index])                      #report
-    index = index + 1
-print ("")
-print ( "Average Response Time: ", timeAverage)
-print ("Maximum Time Taken To Respond: ", timeMax)
-print ("")
-print ("Total Number Of Unique IDs Who Visited The Site: ", noOfUsers)
-print ("Number Of First Years: ", userYear[4])
-print ("Number Of Second Years: ", userYear[3])
-print ("Number Of Third Years: " , userYear[2])
-print ("Number Of Fourth Years: " , userYear[1])
-print ("Number Of Fifth Years: " , userYear[0])
-file.close()
