@@ -1,3 +1,4 @@
+
 apiCount = 0
 endpoint = []; endpointCount = []
 endpointTime = []; endpointTimeCount = []; endpointTimeMax = []
@@ -65,28 +66,28 @@ for line in file:
     elif "Iterative" in line:                                                                                        #Timetable Generation
         iterative += 1
                                                                                                                         #-----
-print("Number Of API Requests: ", apiCount, "\n ------------------------------------------- \n Endpoint Popularity \n")
+print("Number Of API Requests: ", apiCount, "\n\n------------------------------------------- \nEndpoint Popularity \n")
 index = 0
 while index < len(endpoint):
     print (endpoint[index], ": ", endpointCount[index],)
     index += 1
-print("\n Endpoint Time Related Data \n")
+print("\nEndpoint Time Related Data \n")
 index = 0
 while index < len(endpointTime):
     print (endpoint[index], ": Avg: ", (endpointTime[index]/endpointTimeCount[index]), "µs  | Max: ",endpointTimeMax[index], "µs")
     index += 1
-print("\n -------------------------------------------")
+print("\n-------------------------------------------")
 print("Total Number Of Unique IDs: ", len(users), "\n")
 index = 4; year = 1
 while year <= len(userYear):
     print ("Number Of Year", year , "Students: ", userYear[index])
     index -= 1; year += 1 
-print("\n ------------------------------------------- \n Status Code \n")
+print("\n------------------------------------------- \nStatus Code \n")
 index = 0
 while index < len(statusCode):
     print (statusCode[index], ": ", statusCodeCount[index])
     index += 1
-print("\n")
+print("\n-------------------------------------------")
 print("Number Of Timetables Generated: ", backtracking + iterative)
 print("Timetables Generated On average: ", (backtracking + iterative)/len(users))
 print("Number Of Timetables Generated Using Backtracking: ", backtracking)
