@@ -11,9 +11,9 @@ backtracking = 0; iterative = 0
 file = open(r"D:/timetable.log")
 for line in file:
     entryArray = line.split()
-                                                                                                                        -----
-    if entryArray[3] in ("GET", "POST") and len(entryArray) > 6 and entryArray[5] in ("200", "400"):                    API Requests
-        apiCount += 1                                                                                                   -----
+                                                                                                                        #-----
+    if entryArray[3] in ("GET", "POST") and len(entryArray) > 6 and entryArray[5] in ("200", "400"):                    #API Requests
+        apiCount += 1                                                                                                   #-----
 
     if len(entryArray) > 5 and list(entryArray[4])[0] == "/" and entryArray[3] in ('GET', "POST"):
         time = float(entryArray[-1][0:-3])
@@ -37,7 +37,7 @@ for line in file:
                 endpointTime.append(time)
                 endpointTimeCount.append(1)
                 endpointTimeMax.append(time)
-                                                                                                                        -----
+                                                                                                                        #-----
         j = len(statusCode); i = 0; exists = 0
         while i < j:
             if entryArray[5] == statusCode[i]:
@@ -47,7 +47,7 @@ for line in file:
         if exists == 0:
                 statusCode.append(entryArray[5])
                 statusCodeCount.append(1)
-                                                                                                                        -----
+                                                                                                                        #-----
     if entryArray[3] == "router:":
         if len(entryArray) >= 6:
             j = len(users); i = 0; exists = 0
@@ -59,12 +59,12 @@ for line in file:
                 users.append(entryArray[5])
                 userId = list(entryArray[5])
                 userYear[int(userId[4])-1] = userYear[int(userId[4])-1] + 1
-                                                                                                                        -----
+                                                                                                                        #-----
     if "Backtracking" in line:
         backtracking += 1
     elif "Iterative" in line:                                                                                        #Timetable Generation
         iterative += 1
-                                                                                                                        -----
+                                                                                                                        #-----
 print("Number Of API Requests: ", apiCount, "\n ------------------------------------------- \n Endpoint Popularity \n")
 index = 0
 while index < len(endpoint):
@@ -91,5 +91,5 @@ print("Number Of Timetables Generated: ", backtracking + iterative)
 print("Timetables Generated On average: ", (backtracking + iterative)/len(users))
 print("Number Of Timetables Generated Using Backtracking: ", backtracking)
 print("Number Of Timetables Generated Using Iterative: ", iterative)
-                                                                                                                       -----
+                                                                                                                       #-----
 file.close()
