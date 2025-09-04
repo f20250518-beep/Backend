@@ -1,0 +1,97 @@
+
+
+apiCount = 0
+endpoint = []; endpointCount = []
+endpointTime = []; endpointTimeCount = []; endpointTimeMax = []
+year = [0, 0, 0, 0, 0]
+users = []
+userYear = [0 ,0 ,0 ,0, 0]
+statusCode = []
+statusCodeCount = []
+backtracking = 0; iterative = 0
+
+file = open(r"D:/timetable.log")
+for line in file:
+    entryArray = line.split()
+                                                                                                                        #-----
+    if entryArray[3] in ("GET", "POST") and len(entryArray) > 6 and entryArray[5] in ("200", "400"):                    #API Requests
+        apiCount += 1                                                                                                   #-----
+
+    if len(entryArray) > 5 and list(entryArray[4])[0] == "/" and entryArray[3] in ('GET', "POST"):
+        time = float(entryArray[-1][0:-3])
+        if (list(entryArray[-1]))[-2] == "m":
+            time = time*1000
+        elif (list(entryArray[-1]))[-2] == "n":
+            time = time/1000
+        j = len(endpoint); i = 0; exists = 0
+        while i < j:
+            if entryArray[4] == endpoint[i]:
+                endpointCount[i] += 1
+                endpointTime[i] += time
+                endpointTimeCount[i] += 1
+                if time > endpointTimeMax[i]:                                                                          #Endpoint Popularity And Response Time 
+                    endpointTimeMax[i] = time
+                exists = 1
+            i += 1
+        if exists == 0:
+                endpoint.append(entryArray[4])
+                endpointCount.append(1)
+                endpointTime.append(time)
+                endpointTimeCount.append(1)
+                endpointTimeMax.append(time)
+                                                                                                                        #-----
+        j = len(statusCode); i = 0; exists = 0
+        while i < j:
+            if entryArray[5] == statusCode[i]:
+                statusCodeCount[i] += 1
+                exists = 1                                                                                            #Status Code
+            i += 1
+        if exists == 0:
+                statusCode.append(entryArray[5])
+                statusCodeCount.append(1)
+                                                                                                                        #-----
+    if entryArray[3] == "router:":
+        if len(entryArray) >= 6:
+            j = len(users); i = 0; exists = 0
+            while i <= j-1:
+                if str(users[i]) == str(entryArray[5]):                        
+                    exists = 1                                                                                        #Unique IDs
+                i = i + 1
+            if exists == 0:
+                users.append(entryArray[5])
+                userId = list(entryArray[5])
+                userYear[int(userId[4])-1] = userYear[int(userId[4])-1] + 1
+                                                                                                                        #-----
+    if "Backtracking" in line:
+        backtracking += 1
+    elif "Iterative" in line:                                                                                        #Timetable Generation
+        iterative += 1
+                                                                                                                        #-----
+print("Number Of API Requests: ", apiCount, "\n\n------------------------------------------- \nEndpoint Popularity \n")
+index = 0
+while index < len(endpoint):
+    print (endpoint[index], ": ", endpointCount[index], "requests")
+    index += 1
+print("\nEndpoint Time Related Data \n")
+index = 0
+while index < len(endpointTime):
+    print (endpoint[index], ": Avg: ", (endpointTime[index]/endpointTimeCount[index]), "µs  | Max: ",endpointTimeMax[index], "µs")
+    index += 1
+print("\n-------------------------------------------")
+print("Total Number Of Unique IDs: ", len(users), "\n")
+index = 4; year = 1
+while year <= len(userYear):
+    print ("Number Of Year", year , "Students: ", userYear[index])
+    index -= 1; year += 1 
+print("\n------------------------------------------- \nStatus Code \n")
+index = 0
+while index < len(statusCode):
+    print (statusCode[index], ": ", statusCodeCount[index])
+    index += 1
+print("\n-------------------------------------------")
+print("Number Of Timetables Generated: ", backtracking + iterative)
+print("Timetables Generated On Average: ", (backtracking + iterative)/len(users))
+print("Number Of Timetables Generated Using Backtracking: ", backtracking)
+print("Number Of Timetables Generated Using Iterative: ", iterative)
+                                                                                                                       #-----
+file.close()
