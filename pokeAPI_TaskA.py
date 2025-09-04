@@ -25,6 +25,7 @@ with open("D:\pokemon.txt") as file:
         allInfo[pokemon] = info
 
 
-with open("taskA.json", "w") as f:
+with open("pokeData.json", "w") as f:
         json.dump(allInfo, f, indent = 2)
+
 
