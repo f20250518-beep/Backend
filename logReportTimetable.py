@@ -1,5 +1,3 @@
-
-
 apiCount = 0
 endpoint = []; endpointCount = []
 endpointTime = []; endpointTimeCount = []; endpointTimeMax = []
