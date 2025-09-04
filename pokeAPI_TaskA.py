@@ -6,7 +6,7 @@ allInfo = {}
 with open("D:\pokemon.txt") as file:
     for line in file:
         pokemon = line.strip()
-        print("Getting Information For", pokemon)
+        print("Wait")
         url = "https://pokeapi.co/api/v2/pokemon/" + pokemon.lower()
         response = requests.get(url)
         genData = response.json()
@@ -27,5 +27,6 @@ with open("D:\pokemon.txt") as file:
 
 with open("pokeData.json", "w") as f:
         json.dump(allInfo, f, indent = 2)
+
 
 
