@@ -26,24 +26,25 @@ while i<count:
     j = 0
     length = len(nameDD)
     while j<length:
-        info[i][info[0].index(nameDD[j])] = '   2'
+        info[i][info[0].index(nameDD[j])] = '2'
         j += 1
     nameHD = [a['name'] for a in types['damage_relations']['half_damage_from']]
     j = 0
     length = len(nameHD)
     while j<length:
-        info[i][info[0].index(nameHD[j])] = '   0.5'
+        info[i][info[0].index(nameHD[j])] = '0.5'
         j += 1
     nameND = [a['name'] for a in types['damage_relations']['no_damage_from']]
     j = 0
     length = len(nameND)
     while j<length:
-        info[i][info[0].index(nameND[j])] = '   0'
+        info[i][info[0].index(nameND[j])] = '0'
         j += 1
     i += 1
 
 
 table = pandas.DataFrame(info[1:], columns=info[0])
 table.to_csv("damageMatrix.csv", index=False)
+
 
 
